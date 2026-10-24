@@ -1,0 +1,148 @@
+import React from 'react';
+import { History, Download, Link2, Sun, Moon, FileText, Copy, Check } from 'lucide-react';
+
+interface HeaderProps {
+  onOpenHistory: () => void;
+  onOpenExport: () => void;
+  onOpenGuide: () => void;
+  hasResults: boolean;
+  historyCount: number;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
+  totalMatchedLinks?: number;
+  onCopyAllLinks?: () => void;
+  isCopiedAll?: boolean;
+}
+
+export const Header: React.FC<HeaderProps> = ({
+  onOpenHistory,
+  onOpenExport,
+  onOpenGuide,
+  hasResults,
+  historyCount,
+  theme,
+  onToggleTheme,
+  totalMatchedLinks = 0,
+  onCopyAllLinks,
+  isCopiedAll = false
+}) => {
+  return (
+    <header className={
+      theme === 'dark'
+        ? 'bg-zinc-950/90 border-b border-zinc-800/80 text-white sticky top-0 z-30 backdrop-blur-md transition-colors'
+        : 'bg-white/90 border-b border-slate-200 text-slate-900 sticky top-0 z-30 backdrop-blur-md shadow-xs transition-colors'
+    }>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        {/* Logo & Title */}
+        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20">
+            <Link2 className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <h1 className={
+                theme === 'dark'
+                  ? 'text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-200 via-blue-200 to-indigo-300'
+                  : 'text-lg font-bold text-slate-900'
+              }>
+                Link Grabber
+              </h1>
+              <span className="px-2 py-0.5 text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">
+                مستخرج الروابط
+              </span>
+              <span className="hidden sm:inline-flex px-2 py-0.5 text-xs font-mono font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">
+                URL Harvester & Filter
+              </span>
+            </div>
+            <p className={theme === 'dark' ? 'text-xs text-zinc-400 hidden sm:block' : 'text-xs text-slate-500 hidden sm:block'}>
+              استخراج الروابط من صفحات الويب مع إمكانية الفلترة ببداية الرابط أو جزء منه
+            </p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
+          {/* Quick Copy All in Header */}
+          {hasResults && onCopyAllLinks && (
+            <button
+              onClick={onCopyAllLinks}
+              className={
+                isCopiedAll
+                  ? 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500 text-white shadow-md transition-all'
+                  : theme === 'dark'
+                  ? 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 transition-all shadow-xs'
+                  : 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-300 transition-all shadow-xs'
+              }
+              title="Copy all extracted links to clipboard (نسخ كل الروابط)"
+            >
+              {isCopiedAll ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span className="hidden md:inline">
+                {isCopiedAll ? 'تم النسخ!' : `نسخ الروابط (${totalMatchedLinks})`}
+              </span>
+            </button>
+          )}
+
+          {/* User Guide Button */}
+          <button
+            onClick={onOpenGuide}
+            className={
+              theme === 'dark'
+                ? 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 transition-all shadow-xs'
+                : 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 transition-all shadow-xs'
+            }
+            title="Open User Guide & PDF Manual (دليل الاستخدام)"
+          >
+            <FileText className="w-3.5 h-3.5 text-emerald-500" />
+            <span className="hidden md:inline">دليل الاستخدام</span>
+          </button>
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={onToggleTheme}
+            className={
+              theme === 'dark'
+                ? 'p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-amber-400 border border-zinc-700/80 transition-all'
+                : 'p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-amber-600 border border-slate-300 transition-all'
+            }
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+
+          {hasResults && (
+            <button
+              onClick={onOpenExport}
+              className={
+                theme === 'dark'
+                  ? 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 transition-all shadow-xs'
+                  : 'flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-all shadow-xs'
+              }
+              title="Export results (تصدير الروابط)"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="hidden sm:inline">تصدير</span>
+            </button>
+          )}
+
+          <button
+            onClick={onOpenHistory}
+            className={
+              theme === 'dark'
+                ? 'relative flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 transition-all shadow-xs'
+                : 'relative flex items-center space-x-1.5 rtl:space-x-reverse px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-all shadow-xs'
+            }
+            title="Search history (السجل)"
+          >
+            <History className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="hidden sm:inline">السجل</span>
+            {historyCount > 0 && (
+              <span className="ml-1 rtl:mr-1 px-1.5 py-0.2 text-[10px] font-bold bg-blue-600 text-white rounded-full font-mono">
+                {historyCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};

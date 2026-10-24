@@ -1,0 +1,8 @@
+{
+  "name": "Remix Webpage Keyword Search",
+  "description": "High-speed Link Grabber and URL Extractor to crawl webpages and extract links matching prefix or substring filters with batch export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
